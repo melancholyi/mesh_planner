@@ -1,0 +1,11 @@
+# ROS2 C++ Project .gitignore
+
+# large datas  
+*/pcds/   
+
+# colcon build generated files  
+*/build/
+*/install/
+*/log/
+
+

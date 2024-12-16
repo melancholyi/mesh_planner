@@ -1,13 +1,13 @@
 #-------------------- variables  
-set(PROJECT_NAME mesh_bgk)
-set(PLUGIN_NAME mesh_bgk::MeshBGK)  
+set(PROJECT_NAME utils)
+set(PLUGIN_NAME utils::utilsNode)  
 
 #-------------------- cmake version and project  
 cmake_minimum_required(VERSION 3.10)
 project(${PROJECT_NAME})    
 
 #-------------------- basic
-set(CMAKE_CXX_STANDARD 14)            # C++ Version
+set(CMAKE_CXX_STANDARD 17)            # C++ Version
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Wall -Werror)        # warning---->error
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Export compile commands for clangd
@@ -34,6 +34,4 @@ rclcpp_components_register_node(${PROJECT_NAME}
 #-------------------- install
 ament_auto_package(
   INSTALL_TO_SHARE # install others folders  
-  config
-  launch
 ) # export + install + ament_package()

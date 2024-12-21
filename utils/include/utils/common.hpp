@@ -9,26 +9,27 @@
 #ifndef UTILS_COMMON_HPP
 #define UTILS_COMMON_HPP
 
-// rclcpp
+//========== rclcpp
 #include "rclcpp/rclcpp.hpp"
 
-// std_msgs
+//! std_msgs
 #include "std_msgs/msg/bool.hpp"
 #include "std_msgs/msg/int32.hpp"
 #include "std_msgs/msg/float32.hpp"
+#include "std_msgs/msg/header.hpp"
 
-// nav_mags
+//! nav_mags
 #include "nav_msgs/msg/path.hpp"  
 #include "nav_msgs/msg/odometry.hpp"
 
-// sensor_msgs
+//! sensor_msgs
 #include "sensor_msgs/msg/imu.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/msg/camera_info.hpp"
 #include "sensor_msgs/msg/compressed_image.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
-// geometry_msgs
+//! geometry_msgs
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/point_stamped.hpp"
 
@@ -44,10 +45,25 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 
-// visualization_msgs
+//! visualization_msgs
 #include "visualization_msgs/msg/image_marker.hpp"
 #include "visualization_msgs/msg/marker.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
+
+//========== pcl
+//! common
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl_conversions/pcl_conversions.h>
+
+//! filter
+#include <pcl/filters/crop_box.h>
+
+
+
+
+
 
 namespace utils{
     //========== using custom type
@@ -55,6 +71,7 @@ namespace utils{
     using BoolMsgType = std_msgs::msg::Bool;
     using Int32MsgType = std_msgs::msg::Int32;
     using Float32MsgType = std_msgs::msg::Float32;
+    using HeaderMsgType = std_msgs::msg::Header;
 
     //! nav_msgs
     using PathMsgType = nav_msgs::msg::Path;
@@ -82,6 +99,7 @@ namespace utils{
 
     //! visualization_msgs  
     using MarkerMsgType = visualization_msgs::msg::Marker;
+    using MarkerArrayMsgType = visualization_msgs::msg::MarkerArray;
 
     //========== communication 
     //! pub sub type
@@ -91,11 +109,14 @@ namespace utils{
     template<typename MsgT> // subscription
     using SubSPtrType = typename rclcpp::Subscription<MsgT>::SharedPtr;
     
-    template<typename MsgT> // service
+    template<typename MsgT> // service server
     using SrvSPtrType = typename rclcpp::Service<MsgT>::SharedPtr;
     
-    template<typename MsgT> // client
+    template<typename MsgT> // service client 
     using ClientSPtrType = typename rclcpp::Client<MsgT>::SharedPtr;
+    
+    // template<typename MsgT>
+    // using ActSrvSPtrType = typename rclcpp_action::Server<example_interfaces::action::Fibonacci>
     
     using TimerSPtrType = rclcpp::TimerBase::SharedPtr; // timer
     
@@ -113,7 +134,42 @@ namespace utils{
         };
     }
 
+    // inline utils::MarkerMsgType addMarkerSphere(const HeaderMsgType &header, const std::string &ns, const PoseMsgType &pose){
+    //     static int32_t index = 0;
+    //     MarkerMsgType marker;
+    //     marker.header = header;
+    //     marker.ns = ns;
+    //     marker.id = index++;
+    //     marker.type = visualization_msgs::msg::Marker::SPHERE;
+    //     marker.action = visualization_msgs::msg::Marker::ADD;
+    // }
 
+
+    //========== pcl library
+    //! common  
+    using PclCloudXYZIType = pcl::PointCloud<pcl::PointXYZI>;
+    using PclCloudXYZType  = pcl::PointCloud<pcl::PointXYZ>;
+
+    enum class eEnvType{
+        Ground = 0,
+        OverHanging = 1,
+        Obstacle,
+    };
+    enum class eSemanticType{  
+        RigidGround = 0,
+        RheidGround,
+        Grassland,
+
+        Tree,
+        Grass,
+        Bush,
+        Stone,
+        River,
+        
+        CliffNegative,
+        Step,
+        Stairway,
+    };
 }
 
 
